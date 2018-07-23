@@ -1,0 +1,26 @@
+<html>
+<head>
+<title>test web worker</title>
+
+</head>
+<body>
+<span class='output'></span> <br />
+<input type='button' value='Press MEEEEE' onclick='javascript:console.log("output")' />
+
+<script id='worker' type='javascript/worker'>
+	var runNum = 0;
+	var runner = function(addNum, multNum) {
+		runNum += addNum * multNum;
+		
+		self.postMessage({ 'newNum': runNum });
+		setTimeout(function() { self.runner(addNum, multNum); }, 1000);
+	};
+
+	self.onmessage = function(e) { // How to receive a message in a web worker
+		runner(e.data.numberToAdd, e.data.multiply);
+	}
+</script>
+</body>
+
+<script src="app.js"></script>
+</html>
